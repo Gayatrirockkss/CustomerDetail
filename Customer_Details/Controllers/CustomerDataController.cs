@@ -11,18 +11,44 @@ using System.Threading.Tasks;
 
 namespace Customer_Details.Controllers
 {
+    [HandleError]
     public class CustomerDataController : Controller
     {
         private Intern_DBEntities dbcontext = new Intern_DBEntities();
         public bool status;
+
+        #region============== Login() Method========================
+        public ActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> Login([Bind(Include = "Login_Userid,Login_UserName,Login_Password")] LoginDetail login)
+        {
+            Session["UserName"] = login.Login_UserName;
+            Session["Password"] = login.Login_Password;
+            status = await CustomerDataAccess.LoginAsync(login);
+            if (status == true)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View("DataNotFound");
+            }
+        }
+        #endregion
         #region============ GET() Method================================
+        [CustomAuthenticationFilter]
         public async Task<ActionResult> Index()
         {
             return View(await CustomerDataAccess.GetDataAsync());
         }
-         #endregion
+        #endregion
 
         #region=====================Create() Method================
+        //Custom Authorization filter which will give rights only to Admin
+        [CustomAuthorizationFilter(Roles ="Admin")]
         public ActionResult Create()
         {
             return View();
@@ -31,7 +57,10 @@ namespace Customer_Details.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include = "Person_ID,Person_Name,Person_Age,Person_Occupation,Person_Mail")] PersonalDataDetail personalDataDetail)
         {
-            status = await CustomerDataAccess.AddDataAsync(personalDataDetail);
+            if (ModelState.IsValid)
+            {
+                status = await CustomerDataAccess.AddDataAsync(personalDataDetail);
+            }
             if (status == true)
             {
                 return RedirectToAction("Index");
@@ -57,7 +86,10 @@ namespace Customer_Details.Controllers
         [HttpPost]
         public async Task<ActionResult> Update([Bind(Include = "Person_ID,Person_Name,Person_Age,Person_Occupation,Person_Mail")] PersonalDataDetail personalDataDetail)
         {
-            status = await CustomerDataAccess.UpdateDataAsync(personalDataDetail);
+            if (ModelState.IsValid)
+            {
+                status = await CustomerDataAccess.UpdateDataAsync(personalDataDetail);
+            }
             if(status == true)
             {
                 return View();
@@ -75,7 +107,10 @@ namespace Customer_Details.Controllers
         
         public async Task<ActionResult> Delete(int id)
         {
-            status = await CustomerDataAccess.DeleteDataAsync(id);
+            if (ModelState.IsValid)
+            {
+                status = await CustomerDataAccess.DeleteDataAsync(id);
+            }
             if (status == true)
             {
                 return RedirectToAction("Index");
@@ -101,5 +136,9 @@ namespace Customer_Details.Controllers
         }
         #endregion
 
+        public async Task<ActionResult> CascadingDropDown()
+        {
+            return  Redirect("CascadingDropDownList/MyIndex");
+        }
     }
 }

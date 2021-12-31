@@ -26,5 +26,8 @@ namespace Customer_Details.Models
         }
     
         public DbSet<PersonalDataDetail> PersonalDataDetails { get; set; }
+        public DbSet<LoginDetail> LoginDetails { get; set; }
+        public DbSet<CountryDetail> CountryDetails { get; set; }
+        public DbSet<StateDetail> StateDetails { get; set; }
     }
 }

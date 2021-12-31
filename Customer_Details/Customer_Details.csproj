@@ -152,10 +152,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CascadingDropDownListController.cs" />
     <Compile Include="Controllers\CustomerDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CountryDetail.cs">
+      <DependentUpon>CustomerModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomerModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -172,10 +176,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CustomerModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\LoginDetail.cs">
+      <DependentUpon>CustomerModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PersonalDataDetail.cs">
       <DependentUpon>CustomerModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StateDetail.cs">
+      <DependentUpon>CustomerModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\CustomAuthenticationFilter.cs" />
+    <Compile Include="Service\CustomAuthorizationFilter.cs" />
     <Compile Include="Service\CustomerDataAccess.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +250,10 @@
     <Content Include="Views\CustomerData\Update.cshtml" />
     <Content Include="Views\CustomerData\Details.cshtml" />
     <Content Include="Views\CustomerData\DataNotFound.cshtml" />
+    <Content Include="Views\CustomerData\Login.cshtml" />
+    <Content Include="Views\Home\UnAuthorized.cshtml" />
+    <Content Include="Views\CascadingDropDownList\Index.cshtml" />
+    <Content Include="Views\CascadingDropDownList\DropDownList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

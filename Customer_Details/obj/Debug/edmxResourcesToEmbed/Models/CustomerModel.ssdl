@@ -1,5 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="Intern_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CountryDetails">
+    <Key>
+      <PropertyRef Name="CountryID" />
+    </Key>
+    <Property Name="CountryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CountryName" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LoginDetails">
+    <Key>
+      <PropertyRef Name="Login_Userid" />
+    </Key>
+    <Property Name="Login_Userid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Login_UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Login_Password" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
   <EntityType Name="PersonalDataDetails">
     <Key>
       <PropertyRef Name="Person_ID" />
@@ -10,7 +25,34 @@
     <Property Name="Person_Occupation" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="Person_Mail" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
+  <EntityType Name="StateDetails">
+    <Key>
+      <PropertyRef Name="StateID" />
+    </Key>
+    <Property Name="StateID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CountryID" Type="int" />
+    <Property Name="StateName" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <Association Name="FK__StateDeta__Count__5224328E">
+    <End Role="CountryDetails" Type="Self.CountryDetails" Multiplicity="0..1" />
+    <End Role="StateDetails" Type="Self.StateDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CountryDetails">
+        <PropertyRef Name="CountryID" />
+      </Principal>
+      <Dependent Role="StateDetails">
+        <PropertyRef Name="CountryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="Intern_DBModelStoreContainer">
+    <EntitySet Name="CountryDetails" EntityType="Self.CountryDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoginDetails" EntityType="Self.LoginDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PersonalDataDetails" EntityType="Self.PersonalDataDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StateDetails" EntityType="Self.StateDetails" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__StateDeta__Count__5224328E" Association="Self.FK__StateDeta__Count__5224328E">
+      <End Role="CountryDetails" EntitySet="CountryDetails" />
+      <End Role="StateDetails" EntitySet="StateDetails" />
+    </AssociationSet>
   </EntityContainer>
 </Schema>

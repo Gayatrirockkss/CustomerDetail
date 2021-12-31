@@ -1,0 +1,59 @@
+﻿@model Customer_Details.Models.Location
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Cascading Dropdownlist</h2>
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<div class="form-horizontal">
+    
+    <hr />
+    <div class="form-group">
+        @Html.Label("Select Country", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.CountryName, Model.CountryName, "--Select--", new { @id = "countryId" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Select State", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+           @Html.DropDownListFor(m => m.StateName, Model.StateName, "--Select--", new { @id = "stateId" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit" class="btn btn-default" id="btnGet"/>
+        </div>
+    </div>
+    </div>
+
+    <script type="text/javascript">
+        $("#countryId").change(function () {
+            if ($(this).data('options') === undefined) {
+                /*Taking an array of all options-2 and kind of embedding it on the select1*/
+                $(this).data('options', $('#stateId option').clone());
+            }
+            var id = $(this).val();
+            var options = $(this).data('options').filter('[value=' + id + ']');
+            $('#stateId').html(options);
+        });
+        $('#Submit').click(function () {
+            alert($('#countryId .selected').text())
+        });
+    </script>
+<script type="text/javascript">
+    $(function () {
+        $("#btnGet").click(function () {
+            var selectedcountry = $("#countryId").find("option:selected").text();
+            var selectedState = $("#stateId").find("option:selected").text();
+            //alert("Selected Text: " + selectedcountry + " Value: " + selectedState);
+            $("p").text("Country : " + selectedcountry + "   State : " + selectedState);
+        });
+    });
+</script>
+<br />
+<a href="http://localhost:61388/CustomerData/Index">Back to List</a>
+<br />
+

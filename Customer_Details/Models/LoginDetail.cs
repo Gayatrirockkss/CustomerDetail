@@ -12,12 +12,10 @@ namespace Customer_Details.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PersonalDataDetail
+    public partial class LoginDetail
     {
-        public int Person_ID { get; set; }
-        public string Person_Name { get; set; }
-        public int Person_Age { get; set; }
-        public string Person_Occupation { get; set; }
-        public string Person_Mail { get; set; }
+        public int Login_Userid { get; set; }
+        public string Login_UserName { get; set; }
+        public string Login_Password { get; set; }
     }
 }

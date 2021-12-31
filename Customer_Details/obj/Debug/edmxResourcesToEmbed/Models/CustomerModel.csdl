@@ -12,5 +12,49 @@
   </EntityType>
   <EntityContainer Name="Intern_DBEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="PersonalDataDetails" EntityType="Self.PersonalDataDetail" />
+    <EntitySet Name="LoginDetails" EntityType="Intern_DBModel.LoginDetail" />
+    <EntitySet Name="CountryDetails" EntityType="Intern_DBModel.CountryDetail" />
+    <EntitySet Name="StateDetails" EntityType="Intern_DBModel.StateDetail" />
+    <AssociationSet Name="FK__StateDeta__Count__5224328E" Association="Intern_DBModel.FK__StateDeta__Count__5224328E">
+      <End Role="CountryDetail" EntitySet="CountryDetails" />
+      <End Role="StateDetail" EntitySet="StateDetails" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="LoginDetail">
+    <Key>
+      <PropertyRef Name="Login_Userid" />
+    </Key>
+    <Property Name="Login_Userid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login_UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Login_Password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="CountryDetail">
+    <Key>
+      <PropertyRef Name="CountryID" />
+    </Key>
+    <Property Name="CountryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CountryName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="StateDetails" Relationship="Intern_DBModel.FK__StateDeta__Count__5224328E" FromRole="CountryDetail" ToRole="StateDetail" />
+  </EntityType>
+  <EntityType Name="StateDetail">
+    <Key>
+      <PropertyRef Name="StateID" />
+    </Key>
+    <Property Name="StateID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CountryID" Type="Int32" />
+    <Property Name="StateName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="CountryDetail" Relationship="Intern_DBModel.FK__StateDeta__Count__5224328E" FromRole="StateDetail" ToRole="CountryDetail" />
+  </EntityType>
+  <Association Name="FK__StateDeta__Count__5224328E">
+    <End Type="Intern_DBModel.CountryDetail" Role="CountryDetail" Multiplicity="0..1" />
+    <End Type="Intern_DBModel.StateDetail" Role="StateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CountryDetail">
+        <PropertyRef Name="CountryID" />
+      </Principal>
+      <Dependent Role="StateDetail">
+        <PropertyRef Name="CountryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

@@ -5,98 +5,175 @@ using System.Web;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using Customer_Details.Models;
+using System.Web.UI.WebControls;
 
 namespace Customer_Details.Service
 {
     public class CustomerDataAccess
     {
+        private static bool status;
+        static PersonalDataDetail personalData = new PersonalDataDetail();
         public async static Task<List<PersonalDataDetail>> GetDataAsync()
         {
-            using(var dbcontext = new Intern_DBEntities())
+            List<PersonalDataDetail> personalData = new List<PersonalDataDetail>();
+            try
             {
-                var query = from item in dbcontext.PersonalDataDetails
-                            select item;
-                return await query.ToListAsync();
+                using (var dbcontext = new Intern_DBEntities())
+                {
+                    personalData = dbcontext.PersonalDataDetails.ToList();
+                }
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return personalData;
         }
 
         public async static Task<bool> AddDataAsync(PersonalDataDetail personalDataDetail)
         {
             if (personalDataDetail != null)
             {
-                using (var dbcontext = new Intern_DBEntities())
+                try
                 {
-                    dbcontext.PersonalDataDetails.Add(personalDataDetail);
-                    await dbcontext.SaveChangesAsync();
-                    return true;
+                    using (var dbcontext = new Intern_DBEntities())
+                    {
+                        dbcontext.PersonalDataDetails.Add(personalDataDetail);
+                        await dbcontext.SaveChangesAsync();
+                        status = true;
 
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             }
             else
             {
-                return false;
+                status = false;
             }
+            return status;
         }
 
         public async static Task<bool> UpdateDataAsync(PersonalDataDetail personalDataDetail)
         {
             if (personalDataDetail != null)
             {
-                using (var dbcontext = new Intern_DBEntities())
+                try
                 {
-                    dbcontext.PersonalDataDetails.Add(personalDataDetail);
-                    dbcontext.Entry(personalDataDetail).State = EntityState.Modified;
-                    await dbcontext.SaveChangesAsync();
-                    return true;
+                    using (var dbcontext = new Intern_DBEntities())
+                    {
+                        dbcontext.PersonalDataDetails.Add(personalDataDetail);
+                        dbcontext.Entry(personalDataDetail).State = EntityState.Modified;
+                        await dbcontext.SaveChangesAsync();
+                        status = true;
 
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             }
             else
             {
-                return false;
+                status = false;
             }
+            return status;
         }
 
         public async static Task<PersonalDataDetail> UpdateDataAsync(int? id)
         {
-            using (var dbcontext = new Intern_DBEntities())
+            try
             {
-                var personalDataDetail = dbcontext.PersonalDataDetails.Where(s => s.Person_ID == id).FirstOrDefaultAsync();
+                using (var dbcontext = new Intern_DBEntities())
+                {
+                    personalData = dbcontext.PersonalDataDetails.Where(s => s.Person_ID == id).FirstOrDefault();
 
-                return await personalDataDetail;
+                    return  personalData;
 
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return personalData;
         }
 
         public async static Task<bool> DeleteDataAsync(int id)
         {
-            using (var dbcontext = new Intern_DBEntities())
+            try
             {
-                var personalDataDetail = dbcontext.PersonalDataDetails.Where(s => s.Person_ID == id).FirstOrDefault();
-                if (personalDataDetail != null)
+                using (var dbcontext = new Intern_DBEntities())
                 {
-                    dbcontext.PersonalDataDetails.Remove(personalDataDetail);
-                    await dbcontext.SaveChangesAsync();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                    var personalDataDetail = dbcontext.PersonalDataDetails.Where(s => s.Person_ID == id).FirstOrDefault();
+                    if (personalDataDetail != null)
+                    {
+                        dbcontext.PersonalDataDetails.Remove(personalDataDetail);
+                        await dbcontext.SaveChangesAsync();
+                        status = true;
+                    }
+                    else
+                    {
+                        status = false;
+                    }
 
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return status;
         }
 
         public async static Task<PersonalDataDetail> GetDetailDataAsync(int? id)
         {
-            using (var dbcontext = new Intern_DBEntities())
+            try
             {
-                var personalDataDetail = dbcontext.PersonalDataDetails.Where(s => s.Person_ID == id).FirstOrDefaultAsync();
-                
-                return await personalDataDetail;
+                using (var dbcontext = new Intern_DBEntities())
+                {
+                    personalData = dbcontext.PersonalDataDetails.Where(s => s.Person_ID == id).FirstOrDefault();
 
+                    return personalData;
+
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return personalData;
         }
-        
+        public async static Task<bool> LoginAsync(LoginDetail login)
+        {
+            try
+            {
+                    using (var dbcontext = new Intern_DBEntities())
+                    {
+                        var loginAuthentication = dbcontext.LoginDetails
+                            .Where(l => l.Login_UserName == login.Login_UserName && l.Login_Password == login.Login_Password)
+                            .FirstOrDefault();
+
+                        if (loginAuthentication != null)
+                        {
+                            status = true;
+                        }
+                        else
+                            status = false;
+                    }
+                
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return status;
+        }
     }
 }

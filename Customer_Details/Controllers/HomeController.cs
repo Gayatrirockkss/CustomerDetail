@@ -26,5 +26,16 @@ namespace Customer_Details.Controllers
 
             return View();
         }
+
+        public HttpUnauthorizedResult httpUnauthorizedResult()
+        {
+            return new HttpUnauthorizedResult("Access is Denied");
+        }
+
+        public ActionResult UnAuthorized()
+        {
+            ViewBag.Message = "Unauthorized Access!";
+            return View();
+        }
     }
 }

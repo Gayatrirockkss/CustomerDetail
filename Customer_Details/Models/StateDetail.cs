@@ -12,12 +12,12 @@ namespace Customer_Details.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PersonalDataDetail
+    public partial class StateDetail
     {
-        public int Person_ID { get; set; }
-        public string Person_Name { get; set; }
-        public int Person_Age { get; set; }
-        public string Person_Occupation { get; set; }
-        public string Person_Mail { get; set; }
+        public int StateID { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public string StateName { get; set; }
+    
+        public virtual CountryDetail CountryDetail { get; set; }
     }
 }
